@@ -29,7 +29,7 @@ namespace CheckIp
                     Console.WriteLine(Mail.SendMail(args[0], externalOldIp, args[1], args[2]));
                     externalOldIp = extarnalNewIp;
                 }
-                Thread.Sleep(2000);
+                Thread.Sleep(1800000);
             }
 
 
