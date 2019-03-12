@@ -14,7 +14,9 @@ namespace CheckIp
             AssemblyLoadContext.Default.Unloading += SigTermEventHandler;
             Console.CancelKeyPress += CancelHandler;
 
-            string externalOldIp = "84.219.201.131\n"; //new WebClient().DownloadString("http://icanhazip.com");
+            string externalOldIp = new WebClient().DownloadString("http://icanhazip.com");
+            Console.WriteLine("Sending first email...");
+            Console.WriteLine(Mail.SendMail(args[0], externalOldIp, args[1], args[2]));
 
             while (true)
             {
@@ -32,7 +34,7 @@ namespace CheckIp
                 Thread.Sleep(1800000);
             }
 
-
+            
 
 
         }
