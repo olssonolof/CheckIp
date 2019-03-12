@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Runtime.Loader;
+using System.Threading;
 
 namespace CheckIp
 {
@@ -6,7 +9,46 @@ namespace CheckIp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
+
+            AssemblyLoadContext.Default.Unloading += SigTermEventHandler;
+            Console.CancelKeyPress += CancelHandler;
+
+            string externalOldIp = "84.219.201.131\n"; //new WebClient().DownloadString("http://icanhazip.com");
+
+            while (true)
+            {
+                Console.WriteLine("Checking external IP");
+                string extarnalNewIp = new WebClient().DownloadString("http://icanhazip.com");
+                Console.WriteLine($"Old IP: {externalOldIp}New Ip: {extarnalNewIp}");
+
+
+
+                if (externalOldIp != extarnalNewIp)
+                {
+                    Console.WriteLine(Mail.SendMail(args[0], externalOldIp, args[1], args[2]));
+                    externalOldIp = extarnalNewIp;
+                }
+                Thread.Sleep(2000);
+            }
+
+
+
+
         }
+
+        private static void SigTermEventHandler(AssemblyLoadContext obj)
+        {
+            Console.WriteLine("Unloading...");
+        }
+
+        private static void CancelHandler(object sender, ConsoleCancelEventArgs e)
+        {
+            Console.WriteLine("Exiting...");
+            Environment.Exit(0);
+
+        }
+
+
     }
 }
